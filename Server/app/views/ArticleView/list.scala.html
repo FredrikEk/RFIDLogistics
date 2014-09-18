@@ -1,0 +1,34 @@
+@(articles: List[Article])
+
+@title = {
+  Articles <small><a href="@routes.ArticleView.newForm">Add a new one</a></small>
+}
+
+@head_extra = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/font-awesome.min.css")">
+}
+
+@main(title, "article", head_extra) {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Article ID</th>
+        <th>Name</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      @for(article <- articles) {
+      <tr>
+        <td>@article.getId()</td>
+        <td>@article.getName()</td>
+        <td class="text-right">
+          <a href="@routes.ArticleView.editForm(article.getId())"><i class="fa fa-wrench fa-fw fa-lg"></i></a>
+        </td>
+      </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+}

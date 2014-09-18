@@ -1,0 +1,42 @@
+@(articleForm: Form[Article])
+
+@import helper.twitterBootstrap._
+
+@title = {
+  Add a new article to the database <small><a href="@routes.ArticleView.list">Go back</a></small>
+}
+
+@main(title, "article") {
+  @if(articleForm.hasErrors) {
+    <div class="alert-message error">
+      <p><strong>An error has occurred</strong> Make sure to fix all errors before continuing</p>
+    </div>
+  }
+  @helper.form(action = routes.ArticleView.submit, 'id -> "form") {
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6">
+          @helper.inputText(
+            articleForm("id"),
+            '_label -> "Article number of the article",
+            'placeholder -> "Ex: 123456",
+            'class -> "form-control",
+            'required -> true,
+            'maxlength -> 30
+          )
+          @helper.inputText(
+            articleForm("name"),
+            '_label -> "Name of the article",
+            'placeholder -> "Ex: Arla Milk",
+            'class -> "form-control",
+            'required -> true
+          )
+        </div>
+      </div>
+    </fieldset>
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Add">
+      <a href="@routes.ArticleView.list" class="btn">Cancel</a>
+    </div>
+  }
+}

@@ -1,0 +1,62 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+# Authentication
+GET     /login                      controllers.Application.login()
+GET     /logout                     controllers.Application.logout()
+POST    /login                      controllers.Application.authenticate()
+
+# Pallets
+GET     /pallets                    controllers.PalletView.list()
+GET     /pallets/new                controllers.PalletView.newForm()
+POST    /pallets/new                controllers.PalletView.submit()
+GET     /pallets/:id                controllers.PalletView.editForm(id: Int)
+POST    /pallets/:id                controllers.PalletView.update(id: Int)
+GET     /pallets/:id/delete         controllers.PalletView.delete(id: Int)
+GET     /pallets/:id/log            controllers.PalletView.palletLog(id: Int)
+
+
+# Places
+GET     /places                     controllers.PlaceView.list()
+GET     /places/new                 controllers.PlaceView.newForm()
+POST    /places/new                 controllers.PlaceView.submit()
+GET     /places/:id                 controllers.PlaceView.editForm(id: String)
+POST    /places/:id                 controllers.PlaceView.update(id: String)
+GET     /places/:id/delete          controllers.PlaceView.delete(id: String)
+
+# Articles
+GET     /articles                   controllers.ArticleView.list()
+GET     /articles/new               controllers.ArticleView.newForm()
+POST    /articles/new               controllers.ArticleView.submit()
+GET     /articles/:id               controllers.ArticleView.editForm(id: String)
+POST    /articles/:id               controllers.ArticleView.update(id: String)
+GET     /articles/:id/delete        controllers.ArticleView.delete(id: String)
+
+# API
+GET     /api/articles               controllers.api.ArticleView.getArticles()
+
+GET     /api/pallets                controllers.api.PalletView.getPallets()
+POST    /api/pallets                controllers.api.PalletView.newPallet()
+
+GET     /api/pallets/:tag           controllers.api.PalletView.getPallet(tag: String)
+PUT     /api/pallets/:tag           controllers.api.PalletView.updatePallet(tag: String)
+DELETE  /api/pallets/:tag           controllers.api.PalletView.deletePallet(tag: String)
+
+GET     /api/moves                  controllers.api.MoveView.getMoves()
+POST    /api/moves                  controllers.api.MoveView.newMove()
+
+GET     /api/palletslots            controllers.api.PalletSlotView.getSlots()
+POST    /api/palletslots            controllers.api.PalletSlotView.newSlot()
+
+GET     /api/tags                   controllers.api.TagView.getTags()
+DELETE  /api/tags/:tag              controllers.api.TagView.deleteTag(tag: String)
+
+# Logs
+GET     /logs                       controllers.LogView.logs()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)

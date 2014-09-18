@@ -1,0 +1,64 @@
+@(id: Int, palletForm: DynamicForm)
+@import helper._
+
+@title = {
+  Edit pallet <small><a href="@routes.PalletView.list">Go back</a></small>
+}
+
+@main(title, "pallet") {
+
+  @if(palletForm.hasErrors) {
+    <div class="alert-message error">
+      <p><strong>An error has occurred</strong> Make sure to fix all errors before continuing</p>
+    </div>
+  }
+
+  @helper.form(action = routes.PalletView.update(id), 'id -> "form") {
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6">
+          @helper.inputText(
+            palletForm("id"),
+            '_label -> "Id of Pallet",
+            'class -> "form-control disabled",
+            'disabled -> "disabled"
+          )
+          @helper.inputText(
+            palletForm("tag1"),
+            '_label -> "Tag ID 1",
+            'class -> "form-control disabled",
+            'disabled -> "disabled"
+          )
+          @helper.inputText(
+            palletForm("tag2"),
+            '_label -> "Tag ID 2",
+            'class -> "form-control disabled",
+            'disabled -> "disabled"
+          )
+          @inputText(
+            palletForm("amount"),
+            '_label -> "Amount",
+            'placeholder -> "Ex: 310",
+            'class -> "form-control",
+            'required -> true
+          )
+          @select(
+            palletForm("article"),
+            options = options(Article.getIdNameMap()),
+            '_label -> "Pick article from database",
+            '_showConstraints -> false,
+            'class -> "form-control",
+            'required -> true
+          )
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Update">
+      <a class ="btn btn-danger" href="@routes.PalletView.delete(id)" onclick="return confirm('Are you sure?');">Delete</a>
+      <a href="@routes.PalletView.list" class="btn">Back</a>
+    </div>
+  }
+
+}

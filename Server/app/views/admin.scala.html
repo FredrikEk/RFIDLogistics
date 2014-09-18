@@ -1,0 +1,27 @@
+@(temp: String, pallets: HashMap[Integer, String])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+    Welcome to the admin view of Smart Logistiksystem med RFID
+}
+
+@main(title, "AdminView") {
+    <p>
+        Browse one of the tabs above to watch logs or add pallets, places or articles to the database.
+    </p>
+    
+    
+    @if(pallets != null && pallets.size > 0){
+    	<div class = 'panel panel-danger' style='float:left;'>
+		   <div class = 'panel-heading'>Unusual pallet events</div>
+		  		<div class = 'list-group'>
+			  		@for(text <- pallets){
+			  			<a class = 'list-group-item' href='@routes.PalletView.palletLog( text._1 )'> @text._2 </a>
+			  		} 
+		  		</div>
+	   	</div>
+    }
+    
+}

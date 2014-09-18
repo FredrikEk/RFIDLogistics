@@ -1,0 +1,46 @@
+@(placeForm: Form[PalletSlot])
+
+@import helper.twitterBootstrap._
+
+@title = {
+  Add a new place to the database <small><a href="@routes.PlaceView.list">Back</a></small>
+}
+
+@main(title, "place") {
+
+  @if(placeForm.hasErrors) {
+    <div class="alert-message error">
+      <p><strong>An error has occurred</strong> Make sure to fix all errors before continuing</p>
+    </div>
+  }
+
+  @helper.form(action = routes.PlaceView.submit, 'id -> "form") {
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6">
+          @helper.inputText(
+            placeForm("position"),
+            '_label -> "Name of the place (location info)",
+            'placeholder -> "Ex: 245505b",
+            'class -> "form-control",
+          	'required -> true
+          )
+
+          @helper.inputText(
+            placeForm("tag"),
+            '_label -> "Id of the tag on this place",
+            'placeholder -> "Ex: 123456dfhvdsgfvh123hg2fgh2f",
+            'class -> "form-control",
+          	'required -> true
+          )
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Add">
+      <a href="@routes.PlaceView.newForm" class="btn">Clear</a>
+    </div>
+  }
+
+}

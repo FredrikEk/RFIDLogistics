@@ -1,0 +1,51 @@
+@(loginForm: DynamicForm)
+
+@import helper.twitterBootstrap._
+
+@title = {
+  Log in
+}
+
+@main(title, "login") {
+
+  @if(loginForm.hasErrors) {
+    <ul>
+      @for(errorList <- loginForm.errors().values()) {
+        @for(error <- errorList) {
+          <li>@error.message()</li>
+        }
+      }
+    </ul>
+  }
+
+  @helper.form(action = routes.Application.authenticate, 'id -> "form") {
+
+    <fieldset>
+      <legend>Enter your details to log in</legend>
+      <div class="row">
+        <div class="col-sm-6">
+          @helper.inputText(
+            loginForm("email"),
+            '_label -> "Your email address",
+            'placeholder -> "Email",
+            'class -> "form-control"
+          )
+
+          @helper.inputPassword(
+            loginForm("password"),
+            '_label -> "Your password",
+            'placeholder -> "Password",
+            'class -> "form-control"
+          )
+        </div>
+     </div>
+    </fieldset>
+
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Log in">
+      <a href="@routes.Application.index" class="btn">Clear</a>
+    </div>
+
+  }
+
+}

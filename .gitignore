@@ -1,0 +1,5 @@
+/klient-station/methods.h.gch
+*.swp
+*~
+*.o
+Klient/client

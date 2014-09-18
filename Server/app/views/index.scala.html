@@ -1,0 +1,12 @@
+@(message: String)
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+ 	Hello! Login to browse smart logistiksystem!
+}
+
+@main(title, "index") {
+    <h3>Please <small><a href="@routes.Application.login"> log in  </a></small>to browse the adminview</h3>
+}

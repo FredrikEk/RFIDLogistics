@@ -1,0 +1,43 @@
+@(id: String, placeForm: Form[PalletSlot])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@title = {
+  Edit a pallet slot <small><a href="@routes.PlaceView.list">Back </a></small>
+}
+
+@main(title, "place") {
+
+  @if(placeForm.hasErrors) {
+    <div class="alert-message error">
+      <p><strong>An error has occurred</strong> Make sure to fix all errors before continuing</p>
+    </div>
+  }
+
+  @helper.form(action = routes.PlaceView.update(id), 'id -> "form") {
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6">
+          @helper.inputText(
+          placeForm("position"),
+          '_label -> "Name of slot",
+          'class -> "form-control"
+          )
+          @helper.inputText(
+          placeForm("tag.id"),
+          '_label -> "Tag on slot",
+          'class -> "form-control"
+          )
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Update">
+      <a href="@routes.PlaceView.delete(id)" class="btn btn-danger"  onclick='return confirm("Are you sure?"); ' >Delete</a>
+      <a href="@routes.PlaceView.list" class="btn">Back</a>
+    </div>
+  }
+
+}

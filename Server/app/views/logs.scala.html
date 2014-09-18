@@ -1,0 +1,162 @@
+@(log: List[Log])
+@title = {
+  Log
+}
+@head_extra = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/font-awesome.min.css")"></link>
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.sortElements.js")"></script>	
+}
+
+@main(title, "log",head_extra) {
+ 	<div style='display:table'>
+ 		<div style='display:table-row'>
+			<input id='all-log-checkbox' type='checkbox'> All
+			<input id='article-log-checkbox' class='less-checkbox' value='article' type='checkbox'> Articles
+			<input id='pallet-log-checkbox' class='less-checkbox' value='pallet' type='checkbox'> Pallets
+			<input id='moves-log-checkbox' class='less-checkbox' value='move' type='checkbox'> Moves
+ 			<input id='moves-log-checkbox' class='less-checkbox' value='slot' type='checkbox'> Slots
+ 		</div>
+ 		<div style='display:table-row'>
+ 			<input id='search-log-text' placeholder='Filter by text' class='form-control'>
+ 		</div>
+ 	</div>
+  	<div class="table-responsive"> 
+  	<table class="table table-striped">
+      <thead>
+      <tr>
+        <th></th>
+        <th id='entity-header'>Entity</th>
+        <th id='identity-header'>Identity</th>
+        <th id='event-header'>Event</th>
+        <th id='date-header' class="text-right">Date </th>
+      </tr>
+      </thead>
+      <tbody id="log-view-table">
+      @for(row <- log) {
+      <tr class=@row.getEntity()>
+        <td>
+        	@defining(row.getChangeType()){ ct =>
+        	@if(ct == 1){<i class='fa fa-arrow-down fa-fw fa-lg'></i> }
+        	@if(ct == 2){<i class='fa fa-arrow-up fa-fw fa-lg'></i> }
+        	@if(ct == 3){<i class='fa fa-plus fa-fw fa-lg'></i> }
+        	@if(ct == 4){<i class='fa fa-times fa-fw fa-lg'></i> }
+        	@if(ct == 5){<i class='fa fa-wrench fa-fw fa-lg'></i> }}
+        </td>
+        <td>@row.getEntity()</td>
+        <td>@row.getIdentifier()</td>
+        <td>
+        @row.getEvent()</td>
+        <td class="text-right">@row.getFormattedDate()</td>
+       </tr>
+      }
+      </tbody>
+    </table>
+    
+  </div>
+  <script>
+
+		<!-- Initiate boxes-->
+		$("#all-log-checkbox, .less-checkbox").prop('checked',true);
+
+		//TODO: listen to textbox aswell.
+		<!-- Checkbox listeners-->
+		$("#all-log-checkbox").click(function(){
+			if($(this).prop('checked')){
+				$('#search-log-text').val("");
+				$(".less-checkbox").prop('checked',true);
+				$('#log-view-table').children().show();
+			}else{
+				$(".less-checkbox").prop('checked',false);
+				$('#log-view-table').children().hide();
+			}
+		});
+		
+		$('.less-checkbox').change(function(){
+			if($(this).prop('checked')){
+				$('#search-log-text').val("");
+				$("."+$(this).val()).show();
+			}else{
+				$("."+$(this).val()).hide();
+			}
+		});
+		
+		$(".less-checkbox").click(function(){
+			if($('.less-checkbox').length==$('.less-checkbox:checked').length){
+				$("#all-log-checkbox").prop('checked',true);
+			}else{
+				$("#all-log-checkbox").prop('checked',false);
+			}
+		});
+
+		<!-- Search field -->
+		$('#search-log-text').keyup(function(){
+			//Active checkboxes
+			var cbox = $('.less-checkbox').filter(function(i,v){
+				if($(this).prop('checked')){
+					return true;
+				}
+				return false;
+			});
+			//Get values of checkboxes
+			cbox = $.map(cbox, function(v,i){
+				return v.value;
+			});
+			//Rows in table
+			var rows = $('#log-view-table').children();	
+			rows.hide();
+			if (this.value == "") {
+		        rows.filter(function(i,v){
+			        //Filter by checkboxes
+			        for (var c = 0; c < cbox.length; ++c){
+				        if($(this).hasClass(cbox[c])){
+					        return true;
+				        }
+			        }
+			        return false;
+		        }).show();
+		        return;
+		    }
+		    //Separate search words with spaces
+			var data =this.value;
+		    rows.filter(function(i,v){
+			    //Filter by checkboxes
+		        for (var c = 0; c < cbox.length; ++c){
+			        if($(this).hasClass(cbox[c])){
+				        return true;
+			        }
+		        }
+		        return false;
+	        }).filter(function (i, v) {
+		        //Filter by searchwords
+		        if ($(this).is(":contains('" + data + "')")) {
+		                return true;
+	            }
+		        return false;
+		    }).show();
+		});
+		
+		<!-- Sorting rows -->
+		var table = $('#log-view-table');
+	    $('#entity-header,#identity-header,#event-header,#date-header')
+	    .wrapInner('<span title="sort this column"/>')
+	    .each(function(){
+            var th = $(this),
+                  thIndex = th.index(),
+                  inverse = false;
+            th.click(function(){
+                table.find('td').filter(function(){
+                    return $(this).index() === thIndex;
+                }).sortElements(function(a, b){
+                    return $.text([a]) > $.text([b]) ?
+                        inverse ? -1 : 1
+                        : inverse ? 1 : -1;
+                }, function(){
+                    // parentNode is the element we want to move
+                    return this.parentNode; 
+                });
+                inverse = !inverse;    
+        	});    
+	  	});
+    </script>
+}

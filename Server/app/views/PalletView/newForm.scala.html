@@ -1,0 +1,61 @@
+@(palletForm: Form[Pallet], setOfArticleForm: Form[SetOfArticle])
+
+@import helper._
+
+@title = {
+  Add a new Pallet to the database <small><a href="@routes.PalletView.list">Go back</a></small>
+}
+
+@main(title, "pallet") {
+
+  @if(palletForm.hasErrors) {
+    <div class="alert-message error">
+      <p><strong>An error has occurred</strong> Make sure to fix all errors before continuing</p>
+    </div>
+  }
+
+  @helper.form(action = routes.PalletView.submit, 'id -> "form") {
+    <fieldset>
+      <div class="row">
+        <div class="col-sm-6">
+          @inputText(
+            palletForm("tag1"),
+            'id -> "tag1form",
+            '_label -> "Tag ID 1",
+            'placeholder -> "Ex: 123456dfhvdsgfvh123hg2fgh2f",
+            'class -> "form-control",
+            'required -> true
+          )
+          @inputText(
+            palletForm("tag2"),
+            '_label -> "Tag ID 2",
+            'placeholder -> "Ex: 123456dfhvdsgfvh123hg2fgh2f",
+            'class -> "form-control",
+            'required -> true
+          )
+          @inputText(
+            setOfArticleForm("amount"),
+            '_label -> "Amount",
+            'placeholder -> "Ex: 310",
+            'class -> "form-control",
+            'required -> true
+          )
+          @select(
+            setOfArticleForm("article"),
+            options = options(Article.getIdNameMap()),
+            '_label -> "Pick article from database",
+            '_showConstraints -> false,
+            'class -> "form-control",
+            'required -> true
+          )
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <input type="submit" class="btn btn-primary" value="Add">
+      <a href="@routes.PalletView.newForm" class="btn">Clear</a>
+    </div>
+  }
+
+}

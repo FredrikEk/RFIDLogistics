@@ -1,0 +1,55 @@
+@(pallets: List[Pallet], slots: HashMap[Integer, PalletSlot])
+
+@title = {
+  Pallets <small><a href="@routes.PalletView.newForm">Add a new one</a></small>
+}
+
+@head_extra = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/font-awesome.min.css")">
+}
+
+@main(title, "pallet", head_extra) {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tag 1</th>
+        <th>Tag 2</th>
+        <th>Articles</th>
+        <th>Is on slot</th>
+        <th colspan="2">Time entrance</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for(pallet <- pallets) {
+      <tr>
+        <td>@pallet.getId()</td>
+        <td>@pallet.getTag1().getId()</td>
+        <td>@pallet.getTag2().getId()</td>
+        <td>
+        @if(pallet.getArticles().size() > 0) {
+          <ul class="list-unstyled">
+          @for(setOfArticle <- pallet.getArticles()) {
+            <li><strong>@setOfArticle.getAmount()</strong> units of <strong>@setOfArticle.getArticle.toString()</strong>, ID: @setOfArticle.getArticle.getId()</li>
+          }
+          </ul>
+        }
+        </td>
+        <td>
+        @if(slots.containsKey(pallet.getId())){
+          @slots.get(pallet.getId()).getPosition()
+        }else{
+          --
+        }
+        <td>@pallet.getFormattedTimeEntrance()</td>
+        <td class="text-right">
+          <a href="@routes.PalletView.palletLog(pallet.getId())"><i class = 'fa fa-list fa-fw fa-lg'></i></a>
+          <a href="@routes.PalletView.editForm(pallet.getId())"><i class="fa fa-wrench fa-fw fa-lg"></i></a>
+        </td>
+      </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+}

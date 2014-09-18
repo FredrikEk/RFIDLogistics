@@ -1,0 +1,63 @@
+@(pallet_slots: List[PalletSlot], pallets: HashMap[String,Pallet])
+
+@title = {
+  Pallet Slots <small><a href="@routes.PlaceView.newForm">Add a new slot</a></small>
+}
+
+@head_extra = {
+  <link rel="stylesheet" href="@routes.Assets.at("stylesheets/font-awesome.min.css")">
+}
+
+@main(title, "place", head_extra) {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Slot Position</th>
+        <th>Slot Tag</th>
+        <th>Pallet on slot</th>
+        <th>Articles</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for(palletslot <- pallet_slots) {
+      <tr>
+        <td>@palletslot.getPosition()</td>
+        <td>
+        @defining(palletslot.getTag()) { tag =>
+        	@if(tag != null){
+        		@tag.getId()	
+        	} else {
+        		--
+        	}
+        }
+        </td>
+        @if(pallets.containsKey(palletslot.getPosition())){
+        	@defining(pallets.get(palletslot.getPosition())){ pallet =>
+        		<td>
+        			@pallet.getId()
+        		</td>
+        		<td>
+        			<ul class="list-unstyled">
+        			@for( article <- pallet.getArticles()){
+        				<li><strong>@article.getAmount()</strong> units of 
+        				<strong>@article.getArticle().getName()</strong>, 
+        				ID: <strong>@article.getArticle.getId()</strong>
+        				</li>
+        			}
+        			</ul>
+        		</td>
+        	}
+        	
+        }else{
+        	<td>--</td><td>--</td>
+        }    
+        <td class="text-right">
+          <a href="@routes.PlaceView.editForm(palletslot.getPosition())"><i class="fa fa-wrench fa-fw fa-lg"></i></a>
+        </td>
+      </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+}
